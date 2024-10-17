@@ -1,6 +1,10 @@
-# CppConcurrency
-C++ copy of my TheoryOfConcurrency repository. 
-I will be trying to update this repository weekly to keep it up to date with the original repository.
+# Introduction 
 
-## Table of Contents
-- [Introduction](Lab1/README.md)
+This repository contains the code for the first lab of the Theory of Concurrency course. 
+It is a simple C++ program that demonstrates the use of threads and synchronization.
+
+## Exercises
+
+1. Please implement the `Counter` class and two threads: one incrementing
+   and one decrementing the shared counter.
+2. Please test the program (time, result) with and without synchronization.
