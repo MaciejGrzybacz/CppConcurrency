@@ -4,5 +4,5 @@ project(CppConcurrency)
 set(CMAKE_CXX_STANDARD 23)
 add_compile_options(-O3)
 
-
-add_subdirectory(Lab1)
+add_subdirectory(BasicThreadOperations)
+add_subdirectory(PCP)
