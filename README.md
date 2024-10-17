@@ -1,3 +1,3 @@
 # Overview
 
-This repository contains the code for the first lab of the Theory of Concurrency course. 
+This repository contains the C++ copy of the Theory of Concurrency course.
