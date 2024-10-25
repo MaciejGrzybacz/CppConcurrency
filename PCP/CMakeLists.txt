@@ -3,7 +3,7 @@ project(PCP)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(PCP test_3.cpp)
+add_executable(PCP main.cpp)
 
-add_library(PCPLib INTERFACE ProducerConsumerProblem.hpp)
-add_library(ChainLib INTERFACE ProcessChain.hpp)
+add_library(PCPLib INTERFACE include/ProducerConsumerProblem.hpp)
+add_library(ChainLib INTERFACE include/ProcessChain.hpp)

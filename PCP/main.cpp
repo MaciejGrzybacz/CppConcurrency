@@ -1,5 +1,5 @@
-#include "ProducerConsumerProblem.hpp"
-#include "ProcessChain.hpp"
+#include "include/ProducerConsumerProblem.hpp"
+#include "include/ProcessChain.hpp"
 
 void runAllPCP() {
 //    std::cout  << std::endl << "One to one: " << std::endl;

@@ -3,5 +3,5 @@ project(BasicThreadsOperations)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(BTO test_1.cpp)
+add_executable(BTO main.cpp)
 add_library(Counter INTERFACE Counter.hpp)
