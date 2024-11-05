@@ -79,4 +79,5 @@ private:
     std::unordered_map<char, std::set<char>> dependency_relations_;
     std::unordered_map<char, std::set<char>> independent_relations_;
     std::vector<std::vector<char>> fnf_;
+    std::string graph_;
 };
