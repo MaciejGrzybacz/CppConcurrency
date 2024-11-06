@@ -168,9 +168,11 @@ void Solver::build_dependency_graph() {
 
     std::ofstream dot_file("../dependency_graph.dot");
     dot_file << "digraph g {\n";
+    graph_ += "digraph g {\n";
 
     for (size_t i = 0; i < n; i++) {
         dot_file << (i + 1) << "[label=" << word[i] << "]\n";
+        graph_ += std::format("{}[label={}]\n", i + 1, word[i]);
     }
 
     for (size_t i = 0; i < n; i++) {
@@ -183,6 +185,7 @@ void Solver::build_dependency_graph() {
 
                 if (!other_path) {
                     dot_file << (i + 1) << " -> " << (j + 1) << "\n";
+                    graph_ += std::format("{} -> {}\n", i + 1, j + 1);
                 }
 
                 adj[i][j] = true;
@@ -191,6 +194,7 @@ void Solver::build_dependency_graph() {
     }
 
     dot_file << "}\n";
+    graph_ += "}\n";
 }
 
 void Solver::print_results() {
@@ -210,11 +214,13 @@ void Solver::print_results() {
 
     std::cout << "\n\nFNF: ";
     for (const auto& elem : fnf_) {
-        std::cout << "{";
+        std::cout << "(";
         for (char x : elem) {
             std::cout << x;
         }
-        std::cout << "}";
+        std::cout << ")";
     }
-    std::cout << "\n";
+    std::cout << "\n\n";
+    
+    std::cout << graph_;
 }
