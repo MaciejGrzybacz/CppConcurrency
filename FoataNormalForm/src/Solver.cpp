@@ -4,11 +4,9 @@
 #include <format>
 #include <algorithm>
 #include <fstream>
-
-Solver::Solver(std::string_view path) : parser_(path) {}
+#include <stack>
 
 void Solver::run() {
-    parser_.parse_input();
     determine_relations();
     calculate_fnf();
     build_dependency_graph();
@@ -40,60 +38,41 @@ void Solver::determine_relations() {
 }
 
 void Solver::calculate_fnf() {
-    auto word = parser_.get_word();
-    std::vector<bool> used(word.length(), false);
+    std::unordered_map<char, std::stack<char>> stacks;
+    std::string word = parser_.get_word();
+    auto alphabet = parser_.get_alphabet();
 
-    for (size_t i = 0; i < word.length(); i++) {
-        if (used[i]) continue;
+    for(char x : alphabet)
+        stacks[x] = {};
 
-        std::vector<char> bucket;
-        bool can_start_bucket = true;
+    std::reverse(word.begin(), word.end());
 
-        for (size_t k = 0; k < i; k++) {
-            if (!used[k] && (dependency_relations_[word[k]].contains(word[i]) ||
-                             dependency_relations_[word[i]].contains(word[k]))) {
-                can_start_bucket = false;
-                break;
+    for(char a : word) {
+        stacks[a].push(a);
+        auto dependent = dependency_relations_[a];
+        for(char b : dependent)
+            if(a != b) stacks[b].push('*');
+    }
+
+    for(int i = 0; i < word.size(); i++) {
+        std::vector<char> current;
+        for(char x : alphabet)
+        {
+            if(!stacks[x].empty())
+            {
+                char top = stacks[x].top();
+                if(top != '*')
+                    current.push_back(top);
             }
         }
 
-        if (!can_start_bucket) continue;
+        for(char x : current)
+            for(char a : dependency_relations_[x])
+                if(!stacks[a].empty())
+                    stacks[a].pop();
 
-        bucket.push_back(word[i]);
-        used[i] = true;
-
-        for (size_t j = 0; j < word.length(); j++) {
-            if (used[j] || i == j) continue;
-
-            bool can_add = true;
-            for (char c : bucket) {
-                if (dependency_relations_[c].contains(word[j]) ||
-                    dependency_relations_[word[j]].contains(c)) {
-                    can_add = false;
-                    break;
-                }
-            }
-
-            for (size_t k = 0; k < j; k++) {
-                if (!used[k] && (dependency_relations_[word[k]].contains(word[j]) ||
-                                 dependency_relations_[word[j]].contains(word[k]))) {
-                    can_add = false;
-                    break;
-                }
-            }
-
-            if (can_add) {
-                bucket.push_back(word[j]);
-                used[j] = true;
-            }
-        }
-
-        if (!bucket.empty()) {
-            std::sort(bucket.begin(), bucket.end(), [&word](char a, char b) {
-                return word.find(a) < word.find(b);
-            });
-            fnf_.push_back(bucket);
-        }
+        if(!current.empty())
+            fnf_.push_back(current);
     }
 }
 
@@ -118,10 +97,10 @@ void Solver::build_dependency_graph() {
 
     std::vector<std::vector<bool>> adj(n, std::vector<bool>(n, false));
 
+    //adding paths between dependent actions
     for (size_t i = 0; i < n; i++) {
         for (size_t j = i + 1; j < n; j++) {
-            if (dependency_relations_[word[i]].contains(word[j]) ||
-                dependency_relations_[word[j]].contains(word[i])) {
+            if (dependency_relations_[word[i]].contains(word[j])) {
                 adj[i][j] = true;
             }
         }
@@ -136,14 +115,18 @@ void Solver::build_dependency_graph() {
         graph_ += std::format("{}[label={}]\n", i + 1, word[i]);
     }
 
+// Checking every pair of actions for dependencies (i, j) where i < j
     for (size_t i = 0; i < n; i++) {
         for (size_t j = i + 1; j < n; j++) {
             if (adj[i][j]) {
+                
+                //temporarily close path between i and j
                 adj[i][j] = false;
 
                 std::vector<bool> visited(n, false);
                 bool other_path = has_path(adj, i, j, visited);
 
+                // If there is no other path, then this edge is essential
                 if (!other_path) {
                     dot_file << (i + 1) << " -> " << (j + 1) << "\n";
                     graph_ += std::format("{} -> {}\n", i + 1, j + 1);

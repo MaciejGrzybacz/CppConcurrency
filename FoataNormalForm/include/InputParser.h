@@ -26,12 +26,6 @@ public:
      */
     explicit InputParser(std::string_view path);
 
-    ~InputParser() = default;
-    InputParser(const InputParser&) = delete;
-    InputParser& operator=(const InputParser&) = delete;
-    InputParser(InputParser&&) noexcept = default;
-    InputParser& operator=(InputParser&&) noexcept = default;
-
     /**
      * @brief Parses the input file and populates internal data structures
      * @throws std::runtime_error if the file format is invalid or if parsing fails

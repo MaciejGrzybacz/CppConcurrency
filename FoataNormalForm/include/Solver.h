@@ -21,7 +21,7 @@ public:
      * @brief Constructs a new Solver object
      * @param path Path to the input file containing transaction definitions
      */
-    explicit Solver(std::string_view path);
+    explicit Solver(InputParser parser) : parser_(parser) {}
 
     /**
      * @brief Executes the complete analysis workflow

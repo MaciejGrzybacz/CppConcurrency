@@ -1,8 +1,0 @@
-(a) x := x+2y
-(d) w := 2*w
-(b) x := x*z 
-(c) y := y*5*z
-(e) z := y*z
-(f) z := x+y*w
-A = {a, b, c, d, e, f}
-w = abcadef
