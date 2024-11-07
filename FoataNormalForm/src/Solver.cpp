@@ -75,7 +75,6 @@ void Solver::calculate_fnf() {
             fnf_.push_back(current);
     }
 }
-
 bool Solver::has_path(const std::vector<std::vector<bool>>& adj, int start, int end,
                       std::vector<bool>& visited) {
     if (start == end) return true;
